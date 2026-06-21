@@ -1,0 +1,29 @@
+PROJECT: Social Media Sentiment Analysis
+
+Dataset Name:
+Sentiment140 Dataset
+
+Source:
+Kaggle
+
+Source URL:
+https://www.kaggle.com
+
+File Name:
+training.1600000.processed.noemoticon.csv
+
+File Format:
+CSV
+
+Dataset Size:
+227 MB
+
+Number of Records:
+1,600,000 Tweets
+
+Description:
+The dataset contains 1.6 million tweets collected from Twitter.
+Each tweet is labeled with sentiment information and is used for sentiment analysis tasks.
+
+Reason for Selection:
+This dataset contains a large volume of social media data suitable for training and analyzing sentiment classification models.
