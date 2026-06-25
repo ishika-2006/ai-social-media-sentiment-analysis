@@ -1,47 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sentiment Analysis UI</title>
+    <title>AI Social Media Sentiment Analyzer</title>
+
     <style>
         body {
-            font-family: Arial;
-            background-color: #f2f2f2;
-            text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928DAB);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
             background: white;
-            padding: 20px;
-            width: 400px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px gray;
+            padding: 30px;
+            width: 420px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
         }
 
         input {
             width: 90%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 5px #6c63ff;
         }
 
         button {
-            padding: 10px 20px;
-            background: blue;
+            padding: 12px 25px;
+            background: linear-gradient(90deg, #6c63ff, #48c6ef);
             color: white;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
         }
 
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
+        button:hover {
+            transform: scale(1.05);
         }
 
         #loading {
             display: none;
-            color: orange;
+            color: #ff9800;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .positive {
+            color: green;
+        }
+
+        .negative {
+            color: red;
+        }
+
+        .neutral {
+            color: gray;
         }
     </style>
 </head>
@@ -49,15 +96,15 @@
 <body>
 
 <div class="container">
-    <h2>AI Sentiment Analyzer</h2>
+    <h2>🤖 AI Social Media Sentiment Analyzer</h2>
 
-    <input type="text" id="textInput" placeholder="Enter text here">
+    <input type="text" id="textInput" placeholder="Type your sentence here...">
 
     <br>
 
-    <button onclick="analyzeSentiment()">Analyze</button>
+    <button onclick="analyzeSentiment()">Analyze Sentiment</button>
 
-    <p id="loading">Analyzing...</p>
+    <p id="loading">Analyzing sentiment...</p>
 
     <div id="result"></div>
 </div>
@@ -66,8 +113,11 @@
 async function analyzeSentiment() {
     let text = document.getElementById("textInput").value;
 
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("result").innerHTML = "";
+    let resultDiv = document.getElementById("result");
+    let loading = document.getElementById("loading");
+
+    loading.style.display = "block";
+    resultDiv.innerHTML = "";
 
     try {
         let response = await fetch("http://127.0.0.1:5000/api/analyze", {
@@ -80,17 +130,25 @@ async function analyzeSentiment() {
 
         let data = await response.json();
 
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("result").innerHTML =
-            "Sentiment: " + data.sentiment;
+        loading.style.display = "none";
+
+        let sentiment = data.sentiment;
+
+        let className = "";
+        if (sentiment === "Positive") className = "positive";
+        else if (sentiment === "Negative") className = "negative";
+        else className = "neutral";
+
+        resultDiv.innerHTML = "Sentiment: " + sentiment;
+        resultDiv.className = className;
 
     } catch (error) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("result").innerHTML =
-            "Error connecting to backend";
+        loading.style.display = "none";
+        resultDiv.innerHTML = "⚠ Error connecting to backend";
+        resultDiv.style.color = "red";
     }
 }
 </script>
 
 </body>
-</html>
+</html> 
